@@ -38,43 +38,7 @@ public class Inspector {
         }
 
         printMethods(c, insideIndent);
-
-        System.out.println(insideIndent + "FIELDS: FROM: " + c.getName());
-        Field[] fields = c.getDeclaredFields();
-        if (fields.length > 0) {
-          System.out.println(insideIndent + "RECURSIVE: " + recursive);
-
-          for (int i = 0; i < fields.length; i++) {
-            fields[i].setAccessible(true);
-            System.out.println(insideIndent + "\tFIELD NAME: " + fields[i].getName() + " FROM " + c.getName());
-            System.out.println(insideIndent + "\tTYPE: " + fields[i].getType().getName());
-            System.out.println(insideIndent + "\tMODIFIER: " + Modifier.toString(fields[i].getModifiers()));
-            try {
-              if (fields[i].get(obj) != null) {
-                System.out.print(insideIndent + "\tVALUE: " + fields[i].get(obj));
-                if (!(fields[i].getType().isPrimitive())) {
-                  System.out.println("@" + Integer.toHexString(fields[i].get(obj).hashCode()));
-                } else {
-                  System.out.println("");
-                }
-              } else {
-                System.out.println(insideIndent + "\tVALUE: " + fields[i].get(obj));
-              }
-              if (recursive && !(fields[i].getType().isPrimitive()) && (fields[i].get(obj) != null)) {
-                inspectClass(fields[i].get(obj).getClass(), fields[i].get(obj), recursive, insideIndent + "\t");
-              }
-            }
-            catch (IllegalAccessException e) {
-              e.printStackTrace(System.out);
-              System.out.println("Error: " + e.getMessage());
-            }
-
-            System.out.println(insideIndent + "\t-----------------");
-          }
-
-        } else {
-          System.out.println(insideIndent + "\tNONE");
-        }
+        printFields(c, obj, recursive, insideIndent);
 
         System.out.println(indent + "======END OF " + classType + " " + c.getName() + "======");
       }
@@ -176,6 +140,43 @@ public class Inspector {
 
           System.out.println(indent + "\tRETURN TYPE: " + methods[i].getReturnType().getName());
           System.out.println(indent + "\tMODIFIER: " + Modifier.toString(methods[i].getModifiers()));
+          System.out.println(indent + "\t-----------------");
+        }
+      } else {
+        System.out.println(indent + "\tNONE");
+      }
+    }
+
+    private void printFields(Class c, Object obj, boolean recursive, String indent) {
+      System.out.println(indent + "FIELDS: FROM: " + c.getName());
+      Field[] fields = c.getDeclaredFields();
+      if (fields.length > 0) {
+        System.out.println(indent + "RECURSIVE: " + recursive);
+
+        for (int i = 0; i < fields.length; i++) {
+          fields[i].setAccessible(true);
+          System.out.println(indent + "\tFIELD NAME: " + fields[i].getName() + " FROM " + c.getName());
+          System.out.println(indent + "\tTYPE: " + fields[i].getType().getName());
+          System.out.println(indent + "\tMODIFIER: " + Modifier.toString(fields[i].getModifiers()));
+          try {
+            if (fields[i].get(obj) != null) {
+              System.out.print(indent + "\tVALUE: " + fields[i].get(obj));
+              if (!(fields[i].getType().isPrimitive())) {
+                System.out.println("@" + Integer.toHexString(fields[i].get(obj).hashCode()));
+              } else {
+                System.out.println("");
+              }
+            } else {
+              System.out.println(indent + "\tVALUE: " + fields[i].get(obj));
+            }
+            if (recursive && !(fields[i].getType().isPrimitive()) && (fields[i].get(obj) != null)) {
+              inspectClass(fields[i].get(obj).getClass(), fields[i].get(obj), recursive, indent + "\t");
+            }
+          }
+          catch (IllegalAccessException e) {
+            e.printStackTrace(System.out);
+            System.out.println("Error: " + e.getMessage());
+          }
           System.out.println(indent + "\t-----------------");
         }
       } else {
