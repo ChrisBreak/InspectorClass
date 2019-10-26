@@ -73,6 +73,10 @@ public class Inspector {
       }
     }
 
+    public void testPrintInterfaces(Object obj) {
+      printInterfaces(obj.getClass(), obj, false, "");
+    }
+
     private void printConstructors(Class c, String indent) {
       System.out.println(indent + "CONSTRUCTORS: FROM: " + c.getName());
       Constructor[] constructors = c.getDeclaredConstructors();
@@ -88,6 +92,10 @@ public class Inspector {
       } else {
         System.out.println(indent + "\tNONE");
       }
+    }
+
+    public void testPrintConstructors(Class c) {
+      printConstructors(c, "");
     }
 
     private void printMethods(Class c, String indent) {
@@ -162,6 +170,12 @@ public class Inspector {
       } else {
         System.out.println(indent + "\t" + listName + ": NONE");
       }
+    }
+
+    public void testPrintClassList(Class c) {
+      Method[] methods = c.getDeclaredMethods();
+      Class[] parameters = methods[2].getParameterTypes();
+      printClassList(parameters, "", "PARAMETERS");
     }
 
 }
