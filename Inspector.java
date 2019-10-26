@@ -34,37 +34,7 @@ public class Inspector {
 
         if (!c.isInterface()) {
           printInterfaces(c, obj, recursive, insideIndent);
-        }
-
-        if (!c.isInterface()) {
-          System.out.println(insideIndent + "CONSTRUCTORS: FROM: " + c.getName());
-          Constructor[] constructors = c.getDeclaredConstructors();
-          if (constructors.length > 0) {
-            for (int i = 0; i < constructors.length; i++) {
-              System.out.println(insideIndent + "\tCONSTRUCTOR NAME: " + constructors[i].getName() + " FROM: " + c.getName());
-              Class[] parameters = constructors[i].getParameterTypes();
-              if (parameters.length > 0) {
-                System.out.print(insideIndent + "\tPARAMETERS: (");
-                for (int j = 0; j < parameters.length; j++) {
-                  System.out.print(parameters[j].getName());
-                  if (j == (parameters.length - 1)) {
-                    System.out.println(")");
-                  } else {
-                    System.out.print(", ");
-                  }
-                }
-              } else {
-                System.out.println(insideIndent + "\tPARAMETERS: NONE");
-              }
-              System.out.println(insideIndent + "\tMODIFIER: " + Modifier.toString(constructors[i].getModifiers()));
-              System.out.println(insideIndent + "\t-----------------");
-
-            }
-
-          } else {
-            System.out.println(insideIndent + "\tNONE");
-          }
-
+          printConstructors(c, insideIndent);
         }
 
         System.out.println(insideIndent + "METHODS: FROM: " + c.getName());
@@ -178,6 +148,34 @@ public class Inspector {
       if (interfaces.length > 0) {
         for (int i = 0; i < interfaces.length; i++) {
           inspectClass(interfaces[i], obj, recursive, indent + "\t");
+        }
+      } else {
+        System.out.println(indent + "\tNONE");
+      }
+    }
+
+    private void printConstructors(Class c, String indent) {
+      System.out.println(indent + "CONSTRUCTORS: FROM: " + c.getName());
+      Constructor[] constructors = c.getDeclaredConstructors();
+      if (constructors.length > 0) {
+        for (int i = 0; i < constructors.length; i++) {
+          System.out.println(indent + "\tCONSTRUCTOR NAME: " + constructors[i].getName() + " FROM: " + c.getName());
+          Class[] parameters = constructors[i].getParameterTypes();
+          if (parameters.length > 0) {
+            System.out.print(indent + "\tPARAMETERS: (");
+            for (int j = 0; j < parameters.length; j++) {
+              System.out.print(parameters[j].getName());
+              if (j == (parameters.length - 1)) {
+                System.out.println(")");
+              } else {
+                System.out.print(", ");
+              }
+            }
+          } else {
+            System.out.println(indent + "\tPARAMETERS: NONE");
+          }
+          System.out.println(indent + "\tMODIFIER: " + Modifier.toString(constructors[i].getModifiers()));
+          System.out.println(indent + "\t-----------------");
         }
       } else {
         System.out.println(indent + "\tNONE");
