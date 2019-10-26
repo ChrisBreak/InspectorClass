@@ -80,7 +80,7 @@ public class Inspector {
         for (int i = 0; i < constructors.length; i++) {
           System.out.println(indent + "\tCONSTRUCTOR NAME: " + constructors[i].getName() + " FROM: " + c.getName());
           Class[] parameters = constructors[i].getParameterTypes();
-          printParameters(parameters, indent);
+          printClassList(parameters, indent, "PARAMETERS");
 
           System.out.println(indent + "\tMODIFIER: " + Modifier.toString(constructors[i].getModifiers()));
           System.out.println(indent + "\t-----------------");
@@ -97,22 +97,10 @@ public class Inspector {
         for (int i = 0; i < methods.length; i++) {
           System.out.println(indent + "\tMETHOD NAME: " + methods[i].getName() + " FROM " + c.getName());
           Class[] exceptions = methods[i].getExceptionTypes();
-          if (exceptions.length > 0) {
-            System.out.print(indent + "\tEXCEPTIONS THROWN: ");
-            for (int j = 0; j < exceptions.length; j++) {
-              System.out.print(exceptions[j].getName());
-              if (j == (exceptions.length - 1)) {
-                System.out.println("");
-              } else {
-                System.out.print(", ");
-              }
-            }
-          } else {
-            System.out.println(indent + "\tEXCEPTIONS THROWN: NONE");
-          }
+          printClassList(exceptions, indent, "EXCEPTIONS THROWN");
 
           Class[] parameters = methods[i].getParameterTypes();
-          printParameters(parameters, indent);
+          printClassList(parameters, indent, "PARAMETERS");
 
           System.out.println(indent + "\tRETURN TYPE: " + methods[i].getReturnType().getName());
           System.out.println(indent + "\tMODIFIER: " + Modifier.toString(methods[i].getModifiers()));
@@ -160,9 +148,9 @@ public class Inspector {
       }
     }
 
-    private void printParameters(Class[] parameters, String indent) {
+    private void printClassList(Class[] parameters, String indent, String listName) {
       if (parameters.length > 0) {
-        System.out.print(indent + "\tPARAMETERS: (");
+        System.out.print(indent + "\t" + listName + ": (");
         for (int i = 0; i < parameters.length; i++) {
           System.out.print(parameters[i].getName());
           if (i == (parameters.length - 1)) {
@@ -172,7 +160,7 @@ public class Inspector {
           }
         }
       } else {
-        System.out.println(indent + "\tPARAMETERS: NONE");
+        System.out.println(indent + "\t" + listName + ": NONE");
       }
     }
 
