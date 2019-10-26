@@ -33,15 +33,7 @@ public class Inspector {
         }
 
         if (!c.isInterface()) {
-          System.out.println(insideIndent + "INTERFACES: FROM: " + c.getName());
-          Class[] interfaces = c.getInterfaces();
-          if (interfaces.length > 0) {
-            for (int i = 0; i < interfaces.length; i++) {
-              inspectClass(interfaces[i], obj, recursive, insideIndent + "\t");
-            }
-          } else {
-            System.out.println(insideIndent + "\tNONE");
-          }
+          printInterfaces(c, obj, recursive, insideIndent);
         }
 
         if (!c.isInterface()) {
@@ -174,12 +166,22 @@ public class Inspector {
           if (recursive && !(obj.getClass().getComponentType().isPrimitive())) {
             inspectClass(Array.get(obj, i).getClass(), Array.get(obj, i), recursive, insideIndent + "\t");
           }
-
         } else {
           System.out.println(insideIndent + "\tVALUE: " + Array.get(obj, i));
         }
       }
+    }
 
+    private void printInterfaces(Class c, Object obj, boolean recursive, String indent) {
+      System.out.println(indent + "INTERFACES: FROM: " + c.getName());
+      Class[] interfaces = c.getInterfaces();
+      if (interfaces.length > 0) {
+        for (int i = 0; i < interfaces.length; i++) {
+          inspectClass(interfaces[i], obj, recursive, indent + "\t");
+        }
+      } else {
+        System.out.println(indent + "\tNONE");
+      }
     }
 
 }
